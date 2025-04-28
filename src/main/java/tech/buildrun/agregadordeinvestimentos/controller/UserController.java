@@ -8,48 +8,49 @@ import tech.buildrun.agregadordeinvestimentos.service.UserService;
 import java.net.URI;
 import java.util.List;
 
-@RestController
-@RequestMapping("/v1/users")
+@RestController // Indica que esta classe é um controller REST
+@RequestMapping("/v1/users") // Define o caminho base da API para /v1/users
 public class UserController {
 
-    private UserService userService;
+    private UserService userService; // Serviço responsável pela lógica de usuários
 
+    // Injeção de dependência do UserService via construtor
     public UserController(UserService userService) {
         this.userService = userService;
     }
 
-    @PostMapping
+    @PostMapping//Endpoint para criar um novo usuário
     public ResponseEntity<User> createUser(@RequestBody CreateUserDto createUserDto) {
-        var userId = userService.createUser(createUserDto);
-        return ResponseEntity.created(URI.create("/v1/users/" + userId.toString())).build();
+        var userId = userService.createUser(createUserDto); // Chama o serviço para criar o usuário
+        return ResponseEntity.created(URI.create("/v1/users/" + userId.toString())).build(); // Retorna status 201 Created com location do novo recurso
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping("/{userId}") // Endpoint para buscar um usuário pelo ID
     public ResponseEntity<User> getUserById(@PathVariable("userId") String userId) {
-        var user = userService.getUserById(userId);
+        var user = userService.getUserById(userId); // Chama o serviço para buscar o usuário
         if (user.isPresent()) {
-            return ResponseEntity.ok(user.get());
+            return ResponseEntity.ok(user.get()); // Se encontrado, retorna 200 OK com o usuário
         } else {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.notFound().build(); // Se não encontrado, retorna 404 Not Found
         }
     }
 
-    @GetMapping
+    @GetMapping// Endpoint para listar todos os usuários
     public ResponseEntity<List<User>> listUsers() {
-        var users = userService.listUsers();
+        var users = userService.listUsers(); // Chama o serviço para listar todos os usuários
         return ResponseEntity.ok(users);
     }
 
-    @PutMapping("/{userId}")
+    @PutMapping("/{userId}") // Endpoint para atualizar um usuário pelo ID
     public ResponseEntity<Void> updateUserById(@PathVariable("userId") String userId,
                                                @RequestBody UpdateUserDto updateUserDto){
-            userService.updateUserById(userId, updateUserDto);
+            userService.updateUserById(userId, updateUserDto); // Chama o serviço para atualizar o usuário
             return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/{userId}")
+    @DeleteMapping("/{userId}") // Endpoint para deletar um usuário pelo ID
     public ResponseEntity<Void> deleteUserById(@PathVariable("userId") String userId) {
-        userService.deleteUserById(userId);
+        userService.deleteById(userId); // Chama o serviço para deletar o usuário
         return ResponseEntity.noContent().build();
     }
 }

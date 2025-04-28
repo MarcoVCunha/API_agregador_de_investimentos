@@ -31,11 +31,11 @@ public class User {
     @UpdateTimestamp
     private Instant updateTimestamp;
 
-    public User(UUID userId, String username, String email, Instant creationTimestamp, Instant updateTimestamp) {
+    public User(UUID userId, String username, String email, String password, Instant creationTimestamp, Instant updateTimestamp) {
         this.userId = userId;
         this.username = username;
         this.email = email;
-        this.password = password;
+        this.password = this.password;
         this.creationTimestamp = creationTimestamp;
         this.updateTimestamp = updateTimestamp;
     }

@@ -67,7 +67,7 @@ public class UserService {
 
     }
 
-    public void deleteUserById(String userId) {
+    public void deleteById(String userId) {
         var id = UUID.fromString(userId);
 
         var userExists = userRepository.existsById(id);
