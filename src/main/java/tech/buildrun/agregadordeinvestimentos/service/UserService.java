@@ -12,68 +12,73 @@ import java.util.Optional;
 import java.util.UUID;
 
 
-@Service
+@Service // Indica que essa classe é um serviço do Spring (pode ser injetado em controllers, por exemplo)
 public class UserService {
 
     private UserRepository userRepository;
 
     public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+        this.userRepository = userRepository; // Injeta o repositório de usuários
     }
 
     public UUID createUser(CreateUserDto createUserDto) {
+        // Cria um novo objeto User a partir dos dados do DTO recebido
 
         // DTO ->  ENTITY
         var entity = new User();
         entity.setUsername(createUserDto.userName());
         entity.setEmail(createUserDto.email());
         entity.setPassword(createUserDto.password());
-        entity.setCreationTimestamp(Instant.now());
-        entity.setUpdateTimestamp(null);
+        entity.setCreationTimestamp(Instant.now()); // Define a data/hora atual como data de criação
+        entity.setUpdateTimestamp(null); // Ainda não atualizado, então null
 
-        var userSaved = userRepository.save(entity);
+        var userSaved = userRepository.save(entity); // Salva no banco de dados
 
-        return userSaved.getUserId();
+        return userSaved.getUserId(); // Retorna o ID do usuário salvo
     }
 
     public Optional<User> getUserById(String userId) {
-
+        // Busca um usuário pelo ID no banco de dados
         return userRepository.findById(UUID.fromString(userId));
     }
 
     public List<User> listUsers() {
+        // Retorna todos os usuários do banco
         return userRepository.findAll();
     }
 
     public void updateUserById(String userId,
                                UpdateUserDto updateUserDto) {
-        var id = UUID.fromString(userId);
+        // Atualiza um usuário
 
-        var userEntity = userRepository.findById(id);
+        var id = UUID.fromString(userId); // Converte o ID de String para UUID
 
-        if (userEntity.isPresent()) {
+        var userEntity = userRepository.findById(id); // Busca o usuário no banco
+
+        if (userEntity.isPresent()) { // Se o usuário existir
             var user = userEntity.get();
 
             if (updateUserDto.userName() != null){
-                user.setUsername(updateUserDto.userName());
+                user.setUsername(updateUserDto.userName()); // Atualiza o username se foi informado
             }
 
             if (updateUserDto.password() != null){
-                user.setPassword(updateUserDto.password());
+                user.setPassword(updateUserDto.password()); // Atualiza a senha se foi informada
             }
 
-            userRepository.save(user);
+            userRepository.save(user); // Salva as alterações
         }
 
     }
 
     public void deleteById(String userId) {
-        var id = UUID.fromString(userId);
+        // Deleta um usuário
+        var id = UUID.fromString(userId); // Converte o ID de String para UUID
 
-        var userExists = userRepository.existsById(id);
+        var userExists = userRepository.existsById(id); // Verifica se o usuário existe
 
-        if (userExists) {
-            userRepository.deleteById(id);
+        if (userExists) { //Se existir
+            userRepository.deleteById(id); // Deleta o usuário
         }
     }
 }
