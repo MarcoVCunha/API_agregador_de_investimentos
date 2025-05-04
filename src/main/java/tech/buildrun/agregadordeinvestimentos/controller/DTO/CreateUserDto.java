@@ -1,4 +1,4 @@
-package tech.buildrun.agregadordeinvestimentos.controller;
+package tech.buildrun.agregadordeinvestimentos.controller.DTO;
 
 // Record que representa o DTO (Data Transfer Object) para criação de um novo usuário
 public record CreateUserDto(String userName,String email, String password) {

@@ -6,6 +6,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -40,8 +41,13 @@ public class User {
     @UpdateTimestamp
     private Instant updateTimestamp;
 
-    @OneToMany (mappedBy = "user")
-    private List<Account> accounts;
+    @OneToMany (mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Account> accounts = new ArrayList<>();
+
+    // Construtor vazio obrigatório para o JPA
+    public User() {
+
+    }
 
     public User(UUID userId, String username, String email, String password, Instant creationTimestamp, Instant updateTimestamp) {
         this.userId = userId;
@@ -50,11 +56,6 @@ public class User {
         this.password = password;
         this.creationTimestamp = creationTimestamp;
         this.updateTimestamp = updateTimestamp;
-    }
-
-    // Construtor vazio obrigatório para o JPA
-    public User() {
-
     }
 
     public UUID getUserId() {

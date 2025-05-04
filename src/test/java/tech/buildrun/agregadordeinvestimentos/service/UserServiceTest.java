@@ -9,9 +9,8 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.util.Assert;
-import tech.buildrun.agregadordeinvestimentos.controller.CreateUserDto;
-import tech.buildrun.agregadordeinvestimentos.controller.UpdateUserDto;
+import tech.buildrun.agregadordeinvestimentos.controller.DTO.CreateUserDto;
+import tech.buildrun.agregadordeinvestimentos.controller.DTO.UpdateUserDto;
 import tech.buildrun.agregadordeinvestimentos.entity.User;
 import tech.buildrun.agregadordeinvestimentos.repository.UserRepository;
 

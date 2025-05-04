@@ -1,15 +1,23 @@
+
+
 services:
   mysql:
-    image: 'mysql:latest'
+    image: mysql:8
+    container_name: mysql_container
     environment:
-      - 'MYSQL_DATABASE=mydatabase'
-      - 'MYSQL_PASSWORD=senha'
-      - 'MYSQL_ROOT_PASSWORD=verysecret'
-      - 'MYSQL_USER=myuser'
+      MYSQL_DATABASE: mydatabase
+      MYSQL_USER: myuser
+      MYSQL_PASSWORD: senha
+      MYSQL_ROOT_PASSWORD: verysecret
     ports:
-      - '3306:3306'
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
     networks:
       - backend
+
+volumes:
+  mysql-data:
 
 networks:
   backend:

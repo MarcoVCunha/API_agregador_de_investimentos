@@ -1,4 +1,4 @@
-package tech.buildrun.agregadordeinvestimentos.controller;
+package tech.buildrun.agregadordeinvestimentos.controller.DTO;
 
 // Record que representa o DTO (Data Transfer Object) para atualizar informações de um usuário
 public record UpdateUserDto(String userName, String password) {

@@ -2,6 +2,7 @@ package tech.buildrun.agregadordeinvestimentos.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import tech.buildrun.agregadordeinvestimentos.controller.DTO.*;
 import tech.buildrun.agregadordeinvestimentos.entity.User;
 import tech.buildrun.agregadordeinvestimentos.service.UserService;
 
@@ -26,20 +27,24 @@ public class UserController {
     }
 
     @GetMapping("/{userId}") // Endpoint para buscar um usuário pelo ID
-    public ResponseEntity<User> getUserById(@PathVariable("userId") String userId) {
+    public ResponseEntity<UserDto> getUserById(@PathVariable("userId") String userId) {
         var user = userService.getUserById(userId); // Chama o serviço para buscar o usuário
         if (user.isPresent()) {
-            return ResponseEntity.ok(user.get()); // Se encontrado, retorna 200 OK com o usuário
+            return ResponseEntity.ok(new UserDto(user.get())); // Se encontrado, retorna 200 OK com o usuário
         } else {
             return ResponseEntity.notFound().build(); // Se não encontrado, retorna 404 Not Found
         }
     }
 
     @GetMapping// Endpoint para listar todos os usuários
-    public ResponseEntity<List<User>> listUsers() {
-        var users = userService.listUsers(); // Chama o serviço para listar todos os usuários
-        return ResponseEntity.ok(users);
+    public ResponseEntity<List<UserDto>> listUsers() {
+        var users = userService.listUsers();
+        var userDtos = users.stream()
+                .map(UserDto::new)
+                .toList();
+        return ResponseEntity.ok(userDtos);
     }
+
 
     @PutMapping("/{userId}") // Endpoint para atualizar um usuário pelo ID
     public ResponseEntity<Void> updateUserById(@PathVariable("userId") String userId,
@@ -52,5 +57,21 @@ public class UserController {
     public ResponseEntity<Void> deleteUserById(@PathVariable("userId") String userId) {
         userService.deleteById(userId); // Chama o serviço para deletar o usuário
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/{userId}/accounts")
+    public ResponseEntity<Void> createAccount(@PathVariable("userId") String userId,
+                                               @RequestBody CreateAccountDto createAccountDto) {
+        userService.createAccount(userId, createAccountDto);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{userId}/accounts")
+    public ResponseEntity<List<AccountResponseDto>> listAccounts(@PathVariable("userId") String userId) {
+
+        var accounts = userService.listAccounts(userId);
+
+        return ResponseEntity.ok(accounts);
     }
 }
